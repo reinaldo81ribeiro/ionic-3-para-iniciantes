@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { MovieProvider } from "../../providers/movie/movie";
 
 /**
  * Generated class for the FeedPage page.
@@ -12,6 +13,9 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 @Component({
   selector: 'page-feed',
   templateUrl: 'feed.html',
+  providers: [
+    MovieProvider
+  ]
 })
 export class FeedPage {
    
@@ -26,7 +30,11 @@ export class FeedPage {
   
   public nome_usuario:string = "Reinaldo Ribeiro do código";
   
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(
+    public navCtrl: NavController, 
+    public navParams: NavParams,
+    private movieProvider: MovieProvider
+  ) {
   }
 
   public somaDoisNumeros(num1:number, num2:number):number {
@@ -34,7 +42,15 @@ export class FeedPage {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad FeedPage');
+    this.movieProvider.getLastetMovies().subscribe(
+      data=>{
+        const response = (data as any);
+        const returnObj = JSON.parse(response._body);
+        console.log(returnObj);
+      },
+      error=>{
+        console.log(error);
+      })
   }
 
 }
